@@ -16,8 +16,5 @@ lol = do
     let reply = "You got lolld"
     writeLBS $ (E.encodeUtf8 . T.pack) $ reply  
 
-site :: Snap ()
-site = route [ ("/", lol) ]
-
 main :: IO ()
-main = quickHttpServe site
+main = quickHttpServe $ route [ ("/", lol) ] 
