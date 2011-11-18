@@ -43,7 +43,6 @@ Status
 
 This stuff is under progress! Here's the backlog:
 
-- JSON parsing/generation
 - Path variable extraction
-- Automated testing using curl and pattern matching, as in [Eddard](https://github.com/raimohanska/eddard/blob/master/test/FunctionalSpec.hs)
+- Pattern matching examples in tests
 - Giter8 template for cloning the skeleton for _your_project_

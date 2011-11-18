@@ -13,7 +13,7 @@ import Util.RegexEscape(escape)
 
 functionalTests = TestList [
   postTest "Echo string" "/echo" "lol" "lol"
-  --, postTest "Echo JSON" "/jsonecho", "{
+  , postTest "Echo JSON" "/jsonecho" "{\"message\":\"hola\"}" $ escape "{\"message\":\"hola\"}"
   ]
 
 testPort = 8001
