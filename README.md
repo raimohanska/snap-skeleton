@@ -39,6 +39,11 @@ main :: IO ()
 main = quickHttpServe $ route [ ("/", lol) ] 
 ~~~ 
 
+The main method starts Snap and routes the root url to a function named
+`lol`. This function reads the request body (assuming it was a POST with
+UTF-8 encoding),
+then prints it to stdout and finally replies with the same string.
+
 Hope this helps you as much as it does me!
 
 JSON
