@@ -86,11 +86,18 @@ This will generate a JSON string as in
 
 Parsing JSON is similarly easy. Just use the `encode` function.
 
+Automatic testing
+=================
+
+TODO
+
 Status
 ======
 
 This stuff is under progress! Here's the backlog:
 
+- Chapter on automatic testing
 - Path variable extraction
 - Pattern matching examples in tests
 - Giter8 template for cloning the skeleton for _your_project_
+- XML?
