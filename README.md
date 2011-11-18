@@ -22,6 +22,9 @@ look a ton of generated code that you don't understand?
 Don't get me wrong here though: I really dig Snap. It's just `snap
 init` I find unsuitable for my current needs.
 
+Snap intro
+==========
+
 Basically the bare-bones Snap applcation is really simple, like this:
 
 ~~~ .haskell
@@ -37,6 +40,30 @@ main = quickHttpServe $ route [ ("/", lol) ]
 ~~~ 
 
 Hope this helps you as much as it does me!
+
+JSON
+====
+
+Using Text.JSON.Generic, working with JSON data is easy and fun. Like in
+my extremely simple example "JsonEcho", you just define your data type
+to match the JSON structure and call `encode`:
+
+~~~ .haskell
+{-# LANGUAGE DeriveDataTypeable #-}
+import           Text.JSON.Generic
+
+data Hello = Hello { message :: String } deriving (Data, Typeable, Show)
+
+jsonMessage = encode $ Hello "Hello!"
+~~~
+
+This will generate a JSON string as in
+
+~~~ .JSON
+{ "message" : "Hello!" }
+~~~
+
+Parsing JSON is similarly easy. Just use the `encode` function.
 
 Status
 ======
