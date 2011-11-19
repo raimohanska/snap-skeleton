@@ -115,7 +115,6 @@ Status
 
 This stuff is under progress! Here's the backlog:
 
-- Chapter on automatic testing
 - Path variable extraction
 - Pattern matching examples in tests
 - Giter8 template for cloning the skeleton for _your_project_
