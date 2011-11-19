@@ -111,6 +111,52 @@ you should use `Exactly` instead of `Matching`.
 
 It also automatically starts and stops the web service by the way.
 
+RESTful Web Services
+====================
+
+Suppose you wanted to create a RESTful web service for storing bananas (ok, you can kick me).
+You'd want to store new bananas by
+
+~~~
+POST /banana {"color", "yellow"}
+
+=> 1
+~~~
+
+and get existing bananas by
+
+~~~
+GET /banana/1
+
+=> {"color", "yellow"}
+~~~
+
+I included this example in `examples/Restful.hs`. It looks like this:
+
+~~~ .haskell
+data Banana = Banana { color :: String } deriving (Data, Typeable, Show)
+
+bananas :: Snap()
+bananas = newBanana <|> getBanana 
+
+newBanana = method POST $ do 
+    banana <- (liftM decodeJSON readBody) :: Snap Banana
+    let bananaId = "1"
+    writeResponse $ encodeJSON $ bananaId 
+
+
+getBanana = restfulGet getBanana'    
+  where getBanana' "1" = writeResponse $ encodeJSON $ Banana "yellow"
+        getBanana' _   = notFound
+~~~
+
+The `restfulGet` function is a helper that extracts the `id` parameter from the URL for you. 
+The URL mapping is defined in `Main.hs` using the URL pattern `/banana/:id`. 
+This tells Snap that the rest of the path should be mapped into the parameter named "id".
+The only inconvenient thing is that Snap won't give you access to params as `Strings`, 
+but as strict `ByteStrings` instead. I wrote some plumbing code to get that sorted; in `HttpUtil.hs`
+there's a function named `getPar` that gives you just that.
+
 Status
 ======
 
