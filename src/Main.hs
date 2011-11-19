@@ -16,4 +16,5 @@ serve :: Config Snap a -> IO()
 serve config = httpServe config $ route [ 
   ("/echo", echo)
   ,("/jsonecho", jsonEcho)
-  ,("/banana", bananas) ] 
+  ,("/banana", bananas)
+  ,("/banana/:id", bananas) ] 

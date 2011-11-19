@@ -14,6 +14,8 @@ import Util.RegexEscape(escape)
 functionalTests = TestList [
   postTest "Echo string" "/echo" "lol" "l.*l"
   , postTest "Echo JSON" "/jsonecho" "{\"message\":\"hola\"}" $ escape "{\"message\":\"hola\"}"
+  , postTest "POST restful Banana" "/banana" "{\"color\":\"yellow\"}" $ "1"
+  , getTest "GET restful Banana" "/banana/1" $ escape "{\"color\":\"yellow\"}" 
   ]
 
 testPort = 8001
