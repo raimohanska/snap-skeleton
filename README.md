@@ -100,14 +100,14 @@ I've included some facilities for making web service testing easy, so you can ju
 
 ~~~ .haskell
 functionalTests = TestList [
-  postTest "Echo string" "/echo" "lol" "l.*l"
+  postTest "Echo string" "/echo" "lol" $ Matching "l.*l"
   ]
 ~~~
 
 This will do an HTTP POST to your web service using the path `/echo`, 
 writing `lol` into the request body and finally testing that the server will respond with a string 
 starting with `l` and ending with `l`. Yep, that's a regex. If you want to specify the exact reply string
-you should use the `escape` function available in the Util.RegexEscape module.
+you should use `Exactly` instead of `Matching`.
 
 It also automatically starts and stops the web service by the way.
 
