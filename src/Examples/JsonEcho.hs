@@ -10,11 +10,12 @@ import qualified Data.ByteString.Lazy.Char8 as L8
 import qualified Data.Text.Lazy.Encoding as E
 import qualified Data.Text.Lazy as T
 import           Text.JSON.Generic
+import           Util.HttpUtil
 
 jsonEcho :: Snap()
 jsonEcho = do 
-    reqBody <- liftM (T.unpack . E.decodeUtf8) getRequestBody
+    reqBody <- readBody
     let hello = decodeJSON reqBody :: Hello
-    writeLBS $ (E.encodeUtf8 . T.pack) $ encodeJSON $ hello  
+    writeResponse $ encodeJSON $ hello  
 
 data Hello = Hello { message :: String } deriving (Data, Typeable, Show)

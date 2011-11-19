@@ -12,7 +12,7 @@ import Control.Exception(finally)
 import Util.RegexEscape(escape)
 
 functionalTests = TestList [
-  postTest "Echo string" "/echo" "lol" "lol"
+  postTest "Echo string" "/echo" "lol" "l.*l"
   , postTest "Echo JSON" "/jsonecho" "{\"message\":\"hola\"}" $ escape "{\"message\":\"hola\"}"
   ]
 
