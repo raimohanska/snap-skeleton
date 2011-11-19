@@ -89,7 +89,26 @@ Parsing JSON is similarly easy. Just use the `encode` function.
 Automatic testing
 =================
 
-TODO
+I included automatic tests for the sample code. The `run-tests.sh` script runs 'em. 
+It uses `Specs.hs` to find all tests to be run, so you should hook all your tests into the "test suite" by including them in `Specs.hs`.
+
+I use [HSpec] for testing/speccing pure code the [BDD](http://en.wikipedia.org/wiki/Behavior_Driven_Development) way.
+In `FunctionalTest.hs` there are also [functional tests](http://en.wikipedia.org/wiki/Functional_testing) for the example web services.
+These tests are implemented using [HUnit](http://hunit.sourceforge.net/), because HSpec doesn't currently support testing non-pure code.
+I've included some facilities for making web service testing easy, so you can just write
+
+~~~ .haskell
+functionalTests = TestList [
+  postTest "Echo string" "/echo" "lol" "l.*l"
+  ]
+~~~
+
+This will do an HTTP POST to your web service using the path `/echo`, 
+writing `lol` into the request body and finally testing that the server will respond with a string 
+starting with `l` and ending with `l`. Yep, that's a regex. If you want to specify the exact reply string
+you should use the `escape` function available in the Util.RegexEscape module.
+
+It also automatically starts and stops the web service by the way.
 
 Status
 ======
