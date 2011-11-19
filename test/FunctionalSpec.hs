@@ -12,26 +12,32 @@ import Control.Exception(finally)
 import Util.RegexEscape(escape)
 
 functionalTests = TestList [
-  postTest "Echo string" "/echo" "lol" "l.*l"
-  , postTest "Echo JSON" "/jsonecho" "{\"message\":\"hola\"}" $ escape "{\"message\":\"hola\"}"
-  , postTest "POST restful Banana" "/banana" "{\"color\":\"yellow\"}" $ "1"
-  , getTest "GET restful Banana" "/banana/1" $ escape "{\"color\":\"yellow\"}" 
+  postTest "Echo string" "/echo" "lol" $ Matching "l.*l"
+  , postTest "Echo JSON" "/jsonecho" "{\"message\":\"hola\"}" $ Exactly "{\"message\":\"hola\"}"
+  , postTest "POST restful Banana" "/banana" "{\"color\":\"yellow\"}" $ Exactly "1"
+  , getTest "GET restful Banana" "/banana/1" $ Exactly "{\"color\":\"yellow\"}" 
+  , getTest "Unknown Banana not found - 404" "/banana/2" $ ReturnCode 404
   ]
 
 testPort = 8001
 rootUrl = "localhost:" ++ (show testPort) 
 
-postTest :: String -> String -> String -> String -> Test
-postTest desc path request pattern = 
-  httpTest desc path (curlPostGetString (rootUrl ++ path) request) pattern
+data ExpectedResult = Matching String | Exactly String | ReturnCode Int
 
-getTest desc path pattern = httpTest desc path (curlGetString (rootUrl ++ path) []  >>= return . snd) pattern
+postTest :: String -> String -> String -> ExpectedResult -> Test
+postTest desc path request expected = 
+  httpTest desc path (curlPostGetString (rootUrl ++ path) request) expected
 
-httpTest :: String -> String -> IO String -> String -> Test
-httpTest desc path request pattern = TestLabel desc $ TestCase $ withTestServer $ do
-    reply <- request
-    putStrLn $ "Got reply : " ++ reply
-    assertBool desc (match pattern (clean reply))
+getTest desc path expected = httpTest desc path (curlGetGetString (rootUrl ++ path)) expected
+
+httpTest :: String -> String -> IO (Int, String) -> ExpectedResult -> Test
+httpTest desc path request expected = TestLabel desc $ TestCase $ withTestServer $ do
+    (code, body) <- request
+    putStrLn $ "Got reply : " ++ body
+    case expected of
+      Matching pattern -> assertBool desc (match pattern (clean body))
+      Exactly str -> assertEqual desc str body
+      ReturnCode c -> assertEqual desc c code
 
 withTestServer :: IO () -> IO ()
 withTestServer task = do
