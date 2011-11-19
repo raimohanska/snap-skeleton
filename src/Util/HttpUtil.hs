@@ -25,9 +25,7 @@ writeResponse = writeLBS . E.encodeUtf8 . T.pack
 getPar :: String -> Snap (Maybe String)
 getPar name = do
   p <- getParam $ ES.encodeUtf8 $ TS.pack $ name
-  case p of
-    Just val -> return $ Just $ TS.unpack $ ES.decodeUtf8 val
-    Nothing -> return Nothing
+  return $ fmap (TS.unpack . ES.decodeUtf8) p
 
 notFound :: Snap ()
 notFound = do modifyResponse $ setResponseStatus 404 "Not found"
