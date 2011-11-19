@@ -3,13 +3,17 @@ Snap Skeleton
 
 Skeleton for new Haskell/Snap RESTful Web Services. I've removed all unrelated
 complexity such as Snaplets, Templating, Application state etc to make
-it as simple as possible. However, I'm planning to include facilities
+it as simple as possible. However, I've included some facilities
 and examples for
 
 - Parsing UTF8 encoded JSON request body into Haskell data values
 - Generating a JSON response from Haskell data values
 - Extracting values from RESTful paths like /users/jack
 - Automated testing
+
+So this is kind of a tutorial, or a skeleton, or a framework.. say what? Let's just
+say I've put together some shit I like to use when I write web services in Haskell..
+This thing emerged when I found myself copy-pasting a lot of code from one project to another.
 
 
 What's wrong with `snap init`?
@@ -147,6 +151,7 @@ I've included some facilities for making web service testing easy, so you can ju
 ~~~ .haskell
 functionalTests = TestList [
   postTest "Echo string" "/echo" "lol" $ Matching "l.*l"
+  , getTest "Not found" "/wtf" $ ReturnCode 404
   ]
 ~~~
 
@@ -155,7 +160,9 @@ writing `lol` into the request body and finally testing that the server will res
 starting with `l` and ending with `l`. Yep, that's a regex. If you want to specify the exact reply string
 you should use `Exactly` instead of `Matching`.
 
-It also automatically starts and stops the web service by the way.
+The second line will just verify that querying `/wtf` will return 404 : Not Found.
+
+The getTest/postTest functions automatically start and stop the web service by the way.
 
 Status
 ======
