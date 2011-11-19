@@ -24,7 +24,6 @@ rootUrl = "localhost:" ++ (show testPort)
 
 data ExpectedResult = Matching String | Exactly String | ReturnCode Int
 
-postTest :: String -> String -> String -> ExpectedResult -> Test
 postTest desc path request expected = 
   httpTest desc path (curlPostGetString (rootUrl ++ path) request) expected
 
