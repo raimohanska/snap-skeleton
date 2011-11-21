@@ -3,13 +3,17 @@ Snap Skeleton
 
 Skeleton for new Haskell/Snap RESTful Web Services. I've removed all unrelated
 complexity such as Snaplets, Templating, Application state etc to make
-it as simple as possible. However, I'm planning to include facilities
+it as simple as possible. However, I've included some facilities
 and examples for
 
 - Parsing UTF8 encoded JSON request body into Haskell data values
 - Generating a JSON response from Haskell data values
 - Extracting values from RESTful paths like /users/jack
 - Automated testing
+
+So this is kind of a tutorial, or a skeleton, or a framework.. say what? Let's just
+say I've put together some shit I like to use when I write web services in Haskell..
+This thing emerged when I found myself copy-pasting a lot of code from one project to another.
 
 
 What's wrong with `snap init`?
@@ -87,6 +91,52 @@ This will generate a JSON string as in
 
 Parsing JSON is similarly easy. Just use the `encode` function.
 
+RESTful Web Services
+====================
+
+Suppose you wanted to create a RESTful web service for storing bananas (ok, you can kick me).
+You'd want to store new bananas by
+
+~~~
+POST /banana {"color", "yellow"}
+
+=> 1
+~~~
+
+and get existing bananas by
+
+~~~
+GET /banana/1
+
+=> {"color", "yellow"}
+~~~
+
+I included this example in `examples/Restful.hs`. It looks like this:
+
+~~~ .haskell
+data Banana = Banana { color :: String } deriving (Data, Typeable, Show)
+
+bananas :: Snap()
+bananas = newBanana <|> getBanana 
+
+newBanana = method POST $ do 
+    banana <- (liftM decodeJSON readBody) :: Snap Banana
+    let bananaId = "1"
+    writeResponse $ encodeJSON $ bananaId 
+
+
+getBanana = restfulGet getBanana'    
+  where getBanana' "1" = writeResponse $ encodeJSON $ Banana "yellow"
+        getBanana' _   = notFound
+~~~
+
+The `restfulGet` function is a helper that extracts the `id` parameter from the URL for you. 
+The URL mapping is defined in `Main.hs` using the URL pattern `/banana/:id`. 
+This tells Snap that the rest of the path should be mapped into the parameter named "id".
+The only inconvenient thing is that Snap won't give you access to params as `Strings`, 
+but as strict `ByteStrings` instead. I wrote some plumbing code to get that sorted; in `HttpUtil.hs`
+there's a function named `getPar` that gives you just that.
+
 Automatic testing
 =================
 
@@ -100,23 +150,24 @@ I've included some facilities for making web service testing easy, so you can ju
 
 ~~~ .haskell
 functionalTests = TestList [
-  postTest "Echo string" "/echo" "lol" "l.*l"
+  postTest "Echo string" "/echo" "lol" $ Matching "l.*l"
+  , getTest "Not found" "/wtf" $ ReturnCode 404
   ]
 ~~~
 
 This will do an HTTP POST to your web service using the path `/echo`, 
 writing `lol` into the request body and finally testing that the server will respond with a string 
 starting with `l` and ending with `l`. Yep, that's a regex. If you want to specify the exact reply string
-you should use the `escape` function available in the Util.RegexEscape module.
+you should use `Exactly` instead of `Matching`.
 
-It also automatically starts and stops the web service by the way.
+The second line will just verify that querying `/wtf` will return 404 : Not Found.
+
+The getTest/postTest functions automatically start and stop the web service by the way.
 
 Status
 ======
 
 This stuff is under progress! Here's the backlog:
 
-- Path variable extraction
-- Pattern matching examples in tests
 - Giter8 template for cloning the skeleton for _your_project_
 - XML?
