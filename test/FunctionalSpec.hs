@@ -7,7 +7,6 @@ import Control.Concurrent(forkIO, threadDelay, killThread)
 import Util.Curl
 import Network.Curl(curlGetString)
 import Text.Regex.XMLSchema.String(match)
-import Util.XmlMatch(clean)
 import Control.Exception(finally)
 import Util.RegexEscape(escape)
 
@@ -34,7 +33,7 @@ httpTest desc path request expected = TestLabel desc $ TestCase $ withTestServer
     (code, body) <- request
     putStrLn $ "Got reply : " ++ body
     case expected of
-      Matching pattern -> assertBool desc (match pattern (clean body))
+      Matching pattern -> assertBool desc (match pattern (body))
       Exactly str -> assertEqual desc str body
       ReturnCode c -> assertEqual desc c code
 
