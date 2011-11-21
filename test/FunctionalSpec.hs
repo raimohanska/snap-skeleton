@@ -14,7 +14,7 @@ import Util.RegexEscape(escape)
 functionalTests = TestList [
   postTest "Echo string" "/echo" "lol" $ Matching "l.*l"
   , postTest "Echo JSON" "/jsonecho" "{\"message\":\"hola\"}" $ Exactly "{\"message\":\"hola\"}"
-  , postTest "POST restful Banana" "/banana" "{\"color\":\"yellow\"}" $ Exactly "1"
+  , postTest "POST restful Banana" "/banana" "{\"color\":\"yellow\"}" $ Exactly "\"1\""
   , getTest "GET restful Banana" "/banana/1" $ Exactly "{\"color\":\"yellow\"}" 
   , getTest "Unknown Banana not found - 404" "/banana/2" $ ReturnCode 404
   ]
