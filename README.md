@@ -218,7 +218,8 @@ Status
 
 This stuff is under progress! Here's the backlog:
 
-- Cabal test
+- Cabal test for running tests
+- Cabal repl or similar (can has?)
 - Possibly move HttpTester stuff into its own project and publish in Cabal
 - Xml examples? Is there any XML serialization library for mapping Haskell data types into XML?
 - Convert this into a template like in Giter8 (which fails because it seems to have problems with dollar $igns)
