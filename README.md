@@ -47,8 +47,7 @@ main = quickHttpServe $ route [ ("/", lol) ]
 ~~~ 
 
 The main method starts Snap and routes the root url to a function named
-`lol`. This function reads the request body (if it was a POST with
-UTF-8 encoding),
+`lol`. This function reads the request body (if it was a POST),
 then prints it to stdout and finally replies with the same string. 
 The `readBody` and `writeResponse` functions are part of the included `HttpUtil` module,
 and take care of the UTF-8 encoding and decoding involved.
