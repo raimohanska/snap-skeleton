@@ -174,7 +174,7 @@ This will do an HTTP POST to your web service using the path `/echo`,
 writing `lol` into the request body and finally testing that the server will respond with a string 
 starting with `l` and ending with `l`. Yep, that's a regex.
 
-It also tests the other example services I included in snap-skeleton, in a self-documenting way (?).
+It also tests the other example services I included in snap-skeleton, in a self-documenting way (think so?).
 
 This test module uses the utilities defined in HttpTester:
 
@@ -182,6 +182,8 @@ This test module uses the utilities defined in HttpTester:
 - `withForkedServer` is a wrapper that forks a given action in its own thread and kills the thread after the test
 - `post` creates a Test that POSTs given data to given URL and verifies the result using `Matching`, `Exactly` or `ReturnCode`
 - `get` creates a similar Test for HTTP GET
+
+This test uses `Main.serve (setPort port defaultConfig)` as the argument for `withForkedServer` to start up the example web services in the port 8001.
 
 Status
 ======
