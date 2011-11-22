@@ -3,12 +3,6 @@ module FunctionalSpec where
 import Snap.Http.Server.Config
 import Test.HUnit
 import qualified Main as Main
-import Control.Concurrent(forkIO, threadDelay, killThread)
-import Util.Curl
-import Network.Curl(curlGetString)
-import Text.Regex.XMLSchema.String(match)
-import Control.Exception(finally)
-import Util.RegexEscape(escape)
 import HttpTester
 
 functionalTests = wrapTest withTestServer $ TestList [
