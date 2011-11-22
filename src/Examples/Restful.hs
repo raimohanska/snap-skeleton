@@ -3,6 +3,7 @@
 module Examples.Restful where
 
 import           Control.Monad
+import           Control.Monad.Trans(liftIO)
 import           Snap.Core
 import           Data.Typeable
 import           Data.Data
@@ -18,8 +19,8 @@ bananas = newBanana <|> getBanana
 
 newBanana = method POST $ do 
     banana <- (liftM decodeJSON readBody) :: Snap Banana
-    let bananaId = "1" :: String
-    writeResponse $ encodeJSON $ bananaId 
+    liftIO $ putStrLn $ "New banana: " ++ (show banana)
+    writeResponse $ encodeJSON $ ("1" :: String) 
 
 
 getBanana = restfulGet getBanana'    
