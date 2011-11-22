@@ -10,7 +10,7 @@ functionalTests = wrapTest withTestServer $ TestList [
   , post "Echo JSON" url "/jsonecho" "{\"message\":\"hola\"}" $ Exactly "{\"message\":\"hola\"}"
   , get "Echo JSON with GET = 404" url "/jsonecho" $ ReturnCode 404
   , post "POST restful Banana" url "/banana" "{\"color\":\"yellow\"}" $ Exactly "\"1\""
-  , post "POST rotten Banana" url "/banana" "{wtf?}" $ ReturnCode 500
+  , post "POST rotten Banana" url "/banana" "{wtf?}" $ All $ [ReturnCode 500, Matching ".*rotten.*"]
   , get "GET restful Banana" url "/banana/1" $ Exactly "{\"color\":\"yellow\"}" 
   , get "Unknown Banana not found - 404" url "/banana/2" $ ReturnCode 404
   ]

@@ -9,13 +9,14 @@ import Network.Curl(curlGetString)
 import Text.Regex.XMLSchema.String(match)
 import Control.Exception(finally)
 import Util.RegexEscape(escape)
+import System.IO.Silently
 
 wrapTest :: Wrapper -> Test -> Test
 wrapTest wrapper (TestCase a) = TestCase $ wrapper a
 wrapTest wrapper (TestList tests) = TestList $ map (wrapTest wrapper) tests
 wrapTest wrapper (TestLabel label test) = TestLabel label $ wrapTest wrapper test
 
-data ExpectedResult = Matching String | Exactly String | ReturnCode Int
+data ExpectedResult = Matching String | Exactly String | ReturnCode Int | All [ExpectedResult]
 
 type Wrapper = IO () -> IO ()
 
@@ -29,14 +30,17 @@ httpTest :: String -> IO (Int, String) -> ExpectedResult -> Test
 httpTest desc request expected = TestLabel desc $ TestCase $ do
     (code, body) <- request
     putStrLn $ "Got reply : " ++ body
-    case expected of
-      Matching pattern -> assertBool desc (match pattern (body))
-      Exactly str -> assertEqual desc str body
-      ReturnCode c -> assertEqual desc c code
+    verify (code, body) expected
+  where
+      verify (code, body) expected = case expected of
+        Matching pattern -> assertBool desc (match pattern (body))
+        Exactly str -> assertEqual desc str body
+        ReturnCode c -> assertEqual desc c code
+        All checks -> mapM_ (verify (code, body)) checks
 
 withForkedServer :: IO() -> Wrapper
 withForkedServer server task = do
-    serverThread <- forkIO server
+    serverThread <- forkIO $ server
     threadDelay $ toMicros 1000
     task `finally` (killThread serverThread)
 

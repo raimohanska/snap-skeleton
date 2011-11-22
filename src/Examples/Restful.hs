@@ -17,7 +17,7 @@ data Banana = Banana { color :: String } deriving (Data, Typeable, Show)
 bananas :: Snap()
 bananas = newBanana <|> getBanana 
 
-newBanana = method POST $ do 
+newBanana = method POST $ catchError "Banana is rotten" $ do 
     banana <- (liftM decodeJSON readBody) :: Snap Banana
     liftIO $ putStrLn $ "New banana: " ++ (show banana)
     writeResponse $ encodeJSON $ ("1" :: String) 
