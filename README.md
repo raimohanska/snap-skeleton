@@ -39,7 +39,7 @@ lol :: Snap()
 lol = method POST $ do 
     reqBody <- readBody
     liftIO $ putStrLn $ "Received " ++ reqBody
-    let reply = "You got lolld"
+    let reply = "You got lolled"
     writeResponse reply  
 
 main :: IO ()
@@ -48,7 +48,8 @@ main = quickHttpServe $ route [ ("/", lol) ]
 
 The main method starts Snap and routes the root url to a function named
 `lol`. This function reads the request body (if it was a POST),
-then prints it to stdout and finally replies with the same string. 
+then prints it to stdout and finally replies with "You got lolled". 
+
 The `readBody` and `writeResponse` functions are part of the included `HttpUtil` module,
 and take care of the UTF-8 encoding and decoding involved.
 
@@ -184,11 +185,40 @@ This test module uses the utilities defined in HttpTester:
 
 This test uses `Main.serve (setPort port defaultConfig)` as the argument for `withForkedServer` to start up the example web services in the port 8001.
 
+Building and running
+====================
+
+[Cabal](http://www.haskell.org/cabal/) is the Maven for Haskell. 
+You use it to define your package (project) along with its dependencies in a `yourproject.cabal` file.
+For each dependency you can optionally specify a version like "json >= 0.5".
+Cabal will download (from [Hackage](http://hackage.haskell.org/packages/hackage.html)) and install the packages you depend on, so you just say
+
+~~~ .bash
+cabal install
+..
+..
+..
+Installing executable(s) in /Users/juha/.cabal/bin
+~~~
+
+.. and you'll get an executable. If this is your first time running Cabal, it'll take some time because it compiles all
+the dependencies too.
+So if you build snap-skeleton without changing the name of the generated executable (defined in the cabal file),
+you'll get an executable named `snap-skeleton`. Make sure you've got Cabal's output directory (usually ~/.cabal/bin) on your path, and it'll
+be easy to run the executable too:
+
+~~~ .bash
+Juha-Paananens-MacBook-Pro:snap-skeleton juha$ snap-skeleton
+no port specified, defaulting to port 8000
+Listening on http://0.0.0.0:8000/
+~~~
+
 Status
 ======
 
 This stuff is under progress! Here's the backlog:
 
+- Cabal test
 - Possibly move HttpTester stuff into its own project and publish in Cabal
 - Xml examples? Is there any XML serialization library for mapping Haskell data types into XML?
 - Convert this into a template like in Giter8 (which fails because it seems to have problems with dollar $igns)
