@@ -1,4 +1,4 @@
-module HttpTester where
+module Util.HttpTester where
 
 import Snap.Http.Server.Config
 import Test.HUnit
