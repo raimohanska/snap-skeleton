@@ -3,15 +3,11 @@
 module Util.HttpUtil where
 
 import           Control.Monad
-import           Control.Monad.Trans(liftIO)
-import           Data.ByteString (ByteString)
 import           Snap.Core
-import qualified Data.ByteString.Lazy.Char8 as L8
 import qualified Data.Text.Lazy.Encoding as E
 import qualified Data.Text.Lazy as T
 import qualified Data.Text.Encoding as ES
 import qualified Data.Text as TS
-import           Data.Int(Int64)
 
 maxBodyLen = 1000000
 

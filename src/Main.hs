@@ -3,7 +3,6 @@
 module Main where
 
 import           Snap.Http.Server
-import           Snap.Http.Server.Config
 import           Snap.Core
 import           Examples.Echo
 import           Examples.JsonEcho

@@ -2,11 +2,9 @@
 
 module Util.Rest where
 
-import           Control.Monad
-import           Control.Monad.Trans(liftIO)
 import           Snap.Core
 import           Util.HttpUtil
-
+import           Prelude hiding (id, lookup)
 restfulGet :: (String -> Snap()) -> Snap ()
 restfulGet lookup = method GET $ do
     idPar <- getPar("id")
