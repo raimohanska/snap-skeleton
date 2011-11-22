@@ -149,20 +149,39 @@ These tests are implemented using [HUnit](http://hunit.sourceforge.net/), becaus
 I've included some facilities for making web service testing easy, so you can just write
 
 ~~~ .haskell
-functionalTests = TestList [
-  postTest "Echo string" "/echo" "lol" $ Matching "l.*l"
-  , getTest "Not found" "/wtf" $ ReturnCode 404
+module FunctionalSpec where
+
+import Snap.Http.Server.Config
+import Test.HUnit
+import qualified Main as Main
+import HttpTester
+
+functionalTests = wrapTest withTestServer $ TestList [
+  post "Echo string" url "/echo" "lol" $ Matching "l.*l"
+  , post "Echo JSON" url "/jsonecho" "{\"message\":\"hola\"}" $ Exactly "{\"message\":\"hola\"}"
+  , post "POST restful Banana" url "/banana" "{\"color\":\"yellow\"}" $ Exactly "\"1\""
+  , get "GET restful Banana" url "/banana/1" $ Exactly "{\"color\":\"yellow\"}" 
+  , get "Unknown Banana not found - 404" url "/banana/2" $ ReturnCode 404
   ]
+
+port = 8001
+url= "localhost:" ++ (show port) 
+
+withTestServer = withForkedServer $ Main.serve (setPort port defaultConfig) 
 ~~~
 
 This will do an HTTP POST to your web service using the path `/echo`, 
 writing `lol` into the request body and finally testing that the server will respond with a string 
-starting with `l` and ending with `l`. Yep, that's a regex. If you want to specify the exact reply string
-you should use `Exactly` instead of `Matching`.
+starting with `l` and ending with `l`. Yep, that's a regex.
 
-The second line will just verify that querying `/wtf` will return 404 : Not Found.
+It also tests the other example services I included in snap-skeleton, in a self-documenting way (?).
 
-The getTest/postTest functions automatically start and stop the web service by the way.
+This test module uses the utilities defined in HttpTester:
+
+- `wrapTest' wraps any HUnit Test with a given wrapper, so that you can do stuff before and after the actual test
+- `withForkedServer` is a wrapper that forks a given action in its own thread and kills the thread after the test
+- `post` creates a Test that POSTs given data to given URL and verifies the result using `Matching`, `Exactly` or `ReturnCode`
+- `get` creates a similar Test for HTTP GET
 
 Status
 ======
