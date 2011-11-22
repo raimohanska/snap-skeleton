@@ -154,7 +154,7 @@ module FunctionalSpec where
 import Snap.Http.Server.Config
 import Test.HUnit
 import qualified Main as Main
-import HttpTester
+import Util.HttpTester
 
 functionalTests = wrapTest withTestServer $ TestList [
   post "Echo string" url "/echo" "lol" $ Matching "l.*l"
