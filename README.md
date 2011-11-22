@@ -98,7 +98,7 @@ Suppose you wanted to create a RESTful web service for storing bananas (ok, you 
 You'd want to store new bananas by
 
 ~~~
-POST /banana {"color", "yellow"}
+POST /banana {"color": "yellow"}
 
 => 1
 ~~~
@@ -108,7 +108,7 @@ and get existing bananas by
 ~~~
 GET /banana/1
 
-=> {"color", "yellow"}
+=> {"color": "yellow"}
 ~~~
 
 I included this example in `examples/Restful.hs`. It looks like this:
