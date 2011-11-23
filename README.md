@@ -16,12 +16,15 @@ say I've put together some shit I like to use when I write web services in Haske
 This thing emerged when I found myself copy-pasting a lot of code from one project to another.
 
 Requires GHC 7. What? Try this:
+
 ~~~ .bash
 $ ghc --version
 The Glorious Glasgow Haskell Compilation System, version 7.0.3
 $ 
 ~~~
-If it looks like that, you're okay.
+
+If it looks like that, you're okay. If you don't have GHC, you can get started by downloading 
+the [Haskell Platform](http://hackage.haskell.org/platform/), or `brew update; brew install haskell-platform` on a Mac.
 
 What's wrong with `snap init`?
 ==============================
