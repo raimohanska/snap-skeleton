@@ -99,7 +99,7 @@ This will generate a JSON string as in
 { "message" : "Hello!" }
 ~~~
 
-Parsing JSON is similarly easy. Just use the `encode` function.
+Parsing JSON is similarly easy. Just use the `decode` function.
 
 RESTful Web Services
 ====================
