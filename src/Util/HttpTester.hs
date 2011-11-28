@@ -9,7 +9,6 @@ import Network.Curl(curlGetString)
 import Text.Regex.XMLSchema.String(match)
 import Control.Exception(finally)
 import Util.RegexEscape(escape)
-import System.IO.Silently
 
 wrapTest :: Wrapper -> Test -> Test
 wrapTest wrapper (TestCase a) = TestCase $ wrapper a
