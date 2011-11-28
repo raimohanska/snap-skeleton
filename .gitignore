@@ -1,3 +1,4 @@
+cabal-dev
 .ghci
 dist
 log
