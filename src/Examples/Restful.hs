@@ -7,7 +7,8 @@ import           Control.Monad.Trans(liftIO)
 import           Snap.Core
 import           Data.Typeable
 import           Data.Data
-import           Text.JSON.Generic
+import           Data.Aeson.Generic as JSON
+import           Data.Maybe(fromJust)
 import           Control.Applicative
 import           Util.HttpUtil
 import           Util.Rest
@@ -18,11 +19,11 @@ bananas :: Snap()
 bananas = newBanana <|> getBanana 
 
 newBanana = method POST $ catchError "Banana is rotten" $ do 
-    banana <- (liftM decodeJSON readBody) :: Snap Banana
+    banana <- readRequestBody maxBodyLen >>= return . fromJust . JSON.decode :: Snap Banana
     liftIO $ putStrLn $ "New banana: " ++ (show banana)
-    writeResponse $ encodeJSON $ ("1" :: String) 
+    writeLBS $ JSON.encode $ ("1" :: String) 
 
 
 getBanana = restfulGet getBanana'    
-  where getBanana' "1" = writeResponse $ encodeJSON $ Banana "yellow"
+  where getBanana' "1" = writeLBS $ JSON.encode $ Banana "yellow"
         getBanana' _   = notFound

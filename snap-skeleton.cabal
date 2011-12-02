@@ -30,7 +30,7 @@ Executable snap-skeleton
     snap-server == 0.6.*,
     text >= 0.11,
     time >= 1.1 && < 1.4,
-    json >= 0.5,
+    aeson >= 0.4.0.0,
     xmlhtml == 0.1.*,
     HUnit >= 1.2.2.3,
     hspec >= 0.9.0,
@@ -57,5 +57,5 @@ Test-Suite tests
   hs-source-dirs: src, test
   Type:           exitcode-stdio-1.0
   Main-is:        Specs.hs
-  Build-depends:  base, HUnit >= 1.2.4.2, hspec >= 0.9.0
+  Build-depends:  base, HUnit >= 1.2.2.3, hspec >= 0.9.0
   ghc-options:    -threaded
