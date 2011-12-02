@@ -1,2 +1,1 @@
-#!/bin/sh
-runhaskell -isrc:test test/Specs.hs
+cabal configure --enable-tests; cabal build; cabal test

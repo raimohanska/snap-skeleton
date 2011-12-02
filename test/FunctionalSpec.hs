@@ -2,7 +2,7 @@ module FunctionalSpec where
 
 import Snap.Http.Server.Config
 import Test.HUnit
-import qualified Main as Main
+import Server
 import Util.HttpTester
 
 functionalTests = wrapTest withTestServer $ TestList [
@@ -18,4 +18,4 @@ functionalTests = wrapTest withTestServer $ TestList [
 port = 8001
 url= "localhost:" ++ (show port) 
 
-withTestServer = withForkedServer $ Main.serve (setPort port defaultConfig) 
+withTestServer = withForkedServer $ Server.serve (setPort port defaultConfig) 

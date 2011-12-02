@@ -2,7 +2,6 @@ module Util.HttpTester where
 
 import Snap.Http.Server.Config
 import Test.HUnit
-import qualified Main as Main
 import Control.Concurrent(forkIO, threadDelay, killThread)
 import Util.Curl
 import Network.Curl(curlGetString)
@@ -39,7 +38,7 @@ httpTest desc request expected = TestLabel desc $ TestCase $ do
 
 withForkedServer :: IO() -> Wrapper
 withForkedServer server task = do
-    serverThread <- forkIO $ server
+    serverThread <- forkIO server
     threadDelay $ toMicros 1000
     task `finally` (killThread serverThread)
 

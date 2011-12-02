@@ -1,4 +1,3 @@
-module Specs where
 import RegexEscapeSpec
 import FunctionalSpec
 
