@@ -238,8 +238,8 @@ Status
 
 This stuff is under progress! Here's the backlog:
 
-- Cabal test for running tests
-- Cabal repl or similar (can has?)
-- Possibly move HttpTester stuff into its own project and publish in Cabal
-- Xml examples? Is there any XML serialization library for mapping Haskell data types into XML?
-- Convert this into a template like in Giter8 (which fails because it seems to have problems with dollar $igns)
+- s/json/aeson/g
+- s/curl/HTTP/g
+- Learn from Snap tests, possibly employ Snap.Test facilities
+- Cabal repl or similar (cabal-dev ghci is close but doesn't allow reloading of srcs)
+- Convert this into a template for `snap init`
