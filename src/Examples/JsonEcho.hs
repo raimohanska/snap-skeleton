@@ -6,7 +6,7 @@ import           Snap.Core
 import           Text.JSON.Generic
 import           Util.HttpUtil
 
-jsonEcho :: Snap()
+jsonEcho :: Snap ()
 jsonEcho = method POST $ do 
     reqBody <- readBody
     let hello = decodeJSON reqBody :: Hello

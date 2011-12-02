@@ -31,7 +31,7 @@ Please have a look at [Snap API Intro](http://snapframework.com/docs/tutorials/s
 getting started with Snap. Or, have a look at this minimal Snap App:
 
 ~~~ .haskell
-lol :: Snap()
+lol :: Snap ()
 lol = method POST $ do 
     reqBody <- readBody
     liftIO $ putStrLn $ "Received " ++ reqBody
@@ -58,7 +58,7 @@ a string and then produce some other string, you could extract this
 boilerplate into a function like
 
 ~~~ .haskell
-processPost :: (String -> String) -> Snap()
+processPost :: (String -> String) -> Snap ()
 processPost f = do 
     reqBody <- liftM (T.unpack . E.decodeUtf8) getRequestBody
     writeLBS $ E.encodeUtf8 $ T.pack $ f $ reqBody
@@ -113,7 +113,7 @@ I included this example in `examples/Restful.hs`. It looks like this:
 ~~~ .haskell
 data Banana = Banana { color :: String } deriving (Data, Typeable, Show)
 
-bananas :: Snap()
+bananas :: Snap ()
 bananas = newBanana <|> getBanana 
 
 newBanana = method POST $ do 
