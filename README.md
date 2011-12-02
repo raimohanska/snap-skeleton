@@ -67,17 +67,17 @@ processPost f = do
 JSON
 ====
 
-Using Text.JSON.Generic, working with JSON data is easy and fun. Like in
+Using Data.Aeson.Generic, working with JSON data is easy and fun. Like in
 my extremely simple example "JsonEcho", you just define your data type
 to match the JSON structure and call `encode`:
 
 ~~~ .haskell
 {-# LANGUAGE DeriveDataTypeable #-}
-import           Text.JSON.Generic
+import qualified Data.Aeson.Generic as JSON
 
 data Hello = Hello { message :: String } deriving (Data, Typeable, Show)
 
-jsonMessage = encode $ Hello "Hello!"
+jsonMessage = JSON.encode $ Hello "Hello!"
 ~~~
 
 This will generate a JSON string as in
@@ -87,6 +87,10 @@ This will generate a JSON string as in
 ~~~
 
 Parsing JSON is similarly easy. Just use the `decode` function.
+
+Aeson uses lazy ByteStrings instead of Strings. Luckily, that's exactly what Snap uses too, so it's a perfect match.
+
+I included a function `readBodyJson` in my Util.Json module to make it as easy as possible to read JSON from the request body.
 
 RESTful Web Services
 ====================
@@ -116,15 +120,16 @@ data Banana = Banana { color :: String } deriving (Data, Typeable, Show)
 bananas :: Snap ()
 bananas = newBanana <|> getBanana 
 
-newBanana = method POST $ do 
-    banana <- (liftM decodeJSON readBody) :: Snap Banana
-    let bananaId = "1"
-    writeResponse $ encodeJSON $ bananaId 
+newBanana = method POST $ catchError "Banana is rotten" $ do 
+    banana <- readBodyJson :: Snap Banana
+    liftIO $ putStrLn $ "New banana: " ++ (show banana)
+    writeLBS $ JSON.encode $ ("1" :: String) 
 
 
 getBanana = restfulGet getBanana'    
-  where getBanana' "1" = writeResponse $ encodeJSON $ Banana "yellow"
+  where getBanana' "1" = writeLBS $ JSON.encode $ Banana "yellow"
         getBanana' _   = notFound
+
 ~~~
 
 The `restfulGet` function is a helper that extracts the `id` parameter from the URL for you. 
@@ -137,8 +142,17 @@ there's a function named `getPar` that gives you just that.
 Automatic testing
 =================
 
-I included automatic tests for the sample code. The `run-tests.sh` script runs 'em. 
-It uses `Specs.hs` to find all tests to be run, so you should hook all your tests into the "test suite" by including them in `Specs.hs`.
+Cabal supports testing. There are tricks to learn though. For instance,
+
+- You need to define a Test-suite in your Cabal file
+- It needs to have a decent set of dependencies
+- The "main file" for tests must contain a module named "Main". (can be accomplished by omitting module name completely too)
+- Before running `cabal test` you need to `cabal configure --enable-tests` and `cabal build`
+
+I included automatic tests for the sample code. The `run-tests.sh` script does the required Cabal trickery for you.
+It's slow though, so if you've not changed any dependencies, you should use `cabal build;cabal test` instead.
+
+The file `Specs.hs` is used to hook all your tests into the "test suite".
 
 I use [HSpec] for testing/speccing pure code the [BDD](http://en.wikipedia.org/wiki/Behavior_Driven_Development) way.
 In `FunctionalTest.hs` there are also [functional tests](http://en.wikipedia.org/wiki/Functional_testing) for the example web services.
