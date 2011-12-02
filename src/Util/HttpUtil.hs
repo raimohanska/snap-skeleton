@@ -17,7 +17,7 @@ readBody :: Snap String
 readBody = do 
     liftM (T.unpack . E.decodeUtf8) (readRequestBody maxBodyLen)
 
-writeResponse :: String -> Snap()
+writeResponse :: String -> Snap ()
 writeResponse = writeLBS . E.encodeUtf8 . T.pack
 
 getPar :: String -> Snap (Maybe String)
