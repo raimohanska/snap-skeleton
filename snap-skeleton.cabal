@@ -17,6 +17,8 @@ Flag development
 Executable snap-skeleton
   hs-source-dirs: src, test
   main-is: Main.hs
+  default-language: Haskell2010
+
   Build-depends:
     base >= 4 && < 5,
     bytestring >= 0.9.1 && < 0.10,
@@ -55,3 +57,4 @@ Test-Suite tests
   Main-is:        Specs.hs
   Build-depends:  base, HUnit >= 1.2.4.2, hspec >= 0.9.0
   ghc-options:    -threaded
+  default-language: Haskell2010
