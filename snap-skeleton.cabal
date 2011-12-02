@@ -17,6 +17,8 @@ Flag development
 Executable snap-skeleton
   hs-source-dirs: src, test
   main-is: Main.hs
+  default-language: Haskell2010
+
   Build-depends:
     base >= 4 && < 5,
     bytestring >= 0.9.1 && < 0.10,
@@ -46,12 +48,8 @@ Executable snap-skeleton
     -- warnings allows quicker workflow.
     ghc-options: -threaded -w
   else
-    if impl(ghc >= 6.12.0)
-      ghc-options: -threaded -Wall -fwarn-tabs -funbox-strict-fields -O2
-                   -fno-warn-orphans -fno-warn-unused-do-bind
-    else
-      ghc-options: -threaded -Wall -fwarn-tabs -funbox-strict-fields -O2
-                   -fno-warn-orphans
+    ghc-options: -threaded -Wall -fwarn-tabs -funbox-strict-fields -O2
+                 -fno-warn-orphans
 
 Test-Suite tests
   hs-source-dirs: src, test
@@ -59,3 +57,4 @@ Test-Suite tests
   Main-is:        Specs.hs
   Build-depends:  base, HUnit >= 1.2.2.3, hspec >= 0.9.0
   ghc-options:    -threaded
+  default-language: Haskell2010
