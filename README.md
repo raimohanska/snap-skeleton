@@ -210,6 +210,29 @@ no port specified, defaulting to port 8000
 Listening on http://0.0.0.0:8000/
 ~~~
 
+Troubleshooting
+===============
+
+If you have trouble installing package `curl`, check that you have libcurl4 headers installed)
+
+If you have GHC 7.2.1, you will get error on cabal install (at least for
+HSpec 0.9). This is fixed in repo, but new release is not yet available.
+
+No worries, do this:
+
+~~~ .bash
+cabal unpack hspec
+cd hspec-0.9.0
+~~~
+
+Edit Setup.lhs and remove line "import System".
+
+~~~ .bash
+cabal install
+~~~
+
+... and you are done.
+
 Status
 ======
 
