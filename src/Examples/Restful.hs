@@ -12,6 +12,7 @@ import           Data.Maybe(fromJust)
 import           Control.Applicative
 import           Util.HttpUtil
 import           Util.Rest
+import           Util.Json
 
 data Banana = Banana { color :: String } deriving (Data, Typeable, Show)
 
@@ -19,7 +20,7 @@ bananas :: Snap ()
 bananas = newBanana <|> getBanana 
 
 newBanana = method POST $ catchError "Banana is rotten" $ do 
-    banana <- readRequestBody maxBodyLen >>= return . fromJust . JSON.decode :: Snap Banana
+    banana <- readBodyJson :: Snap Banana
     liftIO $ putStrLn $ "New banana: " ++ (show banana)
     writeLBS $ JSON.encode $ ("1" :: String) 
 
