@@ -37,7 +37,7 @@ Executable snap-skeleton
     HUnit >= 1.2.2.3,
     hspec >= 0.9.0,
     hxt-regex-xmlschema >= 9.0.1,
-    curl>=1.3.7
+    HTTP>=4000.2.1
 
   if flag(development)
     cpp-options: -DDEVELOPMENT

@@ -1,14 +1,19 @@
 module Util.Curl where
 
-import Network.Curl
+import Network.HTTP
+import Network.Stream(Result)
 
 curlPostGetString :: String -> String -> IO (Int, String)
-curlPostGetString url input = curlWithArgs (CurlPostFields [input] : method_POST) url
+curlPostGetString url input = simpleHTTP (postRequestWithBody url "text/json" input) >>= convertResponse
 
 curlGetGetString :: String -> IO (Int, String)
-curlGetGetString url = curlWithArgs [] url
+curlGetGetString url = simpleHTTP (getRequest url) >>= convertResponse
 
-curlWithArgs args url = withCurlDo $ do
-  curl <- initialize
-  resp <- do_curl_ curl url args :: IO CurlResponse
-  return (respStatus resp, respBody resp)
+convertResponse resp = do
+  body <- getResponseBody resp
+  code <- getResponseCode resp
+  return (code, body)
+
+getResponseCode :: Result (Response ty) -> IO Int
+getResponseCode (Left err) = fail $ show err
+getResponseCode (Right r) = return $ (\(a, b, c) -> a*100+b*10+c) (rspCode r)
