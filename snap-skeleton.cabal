@@ -33,6 +33,7 @@ Executable snap-skeleton
     text >= 0.11,
     time >= 1.1 && < 1.4,
     aeson >= 0.4.0.0,
+    aeson-qq >= 0.4.1,
     xmlhtml == 0.1.*,
     HUnit >= 1.2.2.3,
     hspec >= 0.9.0,
