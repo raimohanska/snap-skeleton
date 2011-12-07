@@ -227,8 +227,6 @@ Listening on http://0.0.0.0:8000/
 Troubleshooting
 ===============
 
-If you have trouble installing package `curl`, check that you have libcurl4 headers installed)
-
 If you have GHC 7.2.1, you will get error on cabal install (at least for
 HSpec 0.9). This is fixed in repo, but new release is not yet available.
 
@@ -252,8 +250,6 @@ Status
 
 This stuff is under progress! Here's the backlog:
 
-- s/json/aeson/g
-- s/curl/HTTP/g
 - Try out text-json-qq in tests
 - Learn from Snap tests, possibly employ Snap.Test facilities
 - Cabal repl or similar (cabal-dev ghci is close but doesn't allow reloading of srcs)
