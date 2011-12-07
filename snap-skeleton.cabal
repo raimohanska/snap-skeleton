@@ -24,7 +24,6 @@ Executable snap-skeleton
     bytestring >= 0.9.1 && < 0.10,
     data-lens >= 2.0.1 && < 2.1,
     data-lens-template >= 2.1 && < 2.2,
-    heist >= 0.6 && < 0.7,
     MonadCatchIO-transformers >= 0.2.1 && < 0.3,
     mtl >= 2 && < 3,
     snap == 0.6.*,
