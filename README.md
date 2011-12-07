@@ -148,6 +148,7 @@ Cabal supports testing. There are tricks to learn though. For instance,
 - It needs to have a decent set of dependencies
 - The "main file" for tests must contain a module named "Main". (can be accomplished by omitting module name completely too)
 - Before running `cabal test` you need to `cabal configure --enable-tests` and `cabal build`
+- `cabal test` does not directly support HUnit: In your main function, you must make sure to return an error code to tell Cabal that the test failed.
 
 I included automatic tests for the sample code. The `run-tests.sh` script does the required Cabal trickery for you.
 It's slow though, so if you've not changed any dependencies, you should use `cabal build;cabal test` instead.
