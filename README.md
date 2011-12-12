@@ -251,7 +251,6 @@ Status
 
 This stuff is under progress! Here's the backlog:
 
-- Try out text-json-qq in tests
 - Learn from Snap tests, possibly employ Snap.Test facilities
 - Cabal repl or similar (cabal-dev ghci is close but doesn't allow reloading of srcs)
 - Convert this into a template for `snap init`
