@@ -161,25 +161,31 @@ These tests are implemented using [HUnit](http://hunit.sourceforge.net/), becaus
 I've included some facilities for making web service testing easy, so you can just write
 
 ~~~ .haskell
+{-# LANGUAGE QuasiQuotes #-}
 module FunctionalSpec where
 
 import Snap.Http.Server.Config
 import Test.HUnit
-import qualified Main as Main
+import Server
 import Util.HttpTester
+import Data.Aeson.QQ
+import Data.Aeson.Types
+import Data.Text
 
 functionalTests = wrapTest withTestServer $ TestList [
   post "Echo string" url "/echo" "lol" $ Matching "l.*l"
-  , post "Echo JSON" url "/jsonecho" "{\"message\":\"hola\"}" $ Exactly "{\"message\":\"hola\"}"
-  , post "POST restful Banana" url "/banana" "{\"color\":\"yellow\"}" $ Exactly "\"1\""
-  , get "GET restful Banana" url "/banana/1" $ Exactly "{\"color\":\"yellow\"}" 
+  , postJson "Echo JSON" url "/jsonecho" [aesonQQ|{message:"hola"}|] $ Json [aesonQQ| {message:"hola"} |]
+  , get "Echo JSON with GET = 404" url "/jsonecho" $ ReturnCode 404
+  , postJson "POST restful Banana" url "/banana" [aesonQQ|{color:"yellow"}|] $ Exactly "\"1\""
+  , post "POST rotten Banana" url "/banana" "{wtf?}" $ All $ [ReturnCode 500, Matching ".*rotten.*"]
+  , get "GET restful Banana" url "/banana/1" $ Json [aesonQQ|{color:"yellow"}|] 
   , get "Unknown Banana not found - 404" url "/banana/2" $ ReturnCode 404
   ]
 
 port = 8001
-url= "localhost:" ++ (show port) 
+url= "http://localhost:" ++ (show port) 
 
-withTestServer = withForkedServer $ Main.serve (setPort port defaultConfig) 
+withTestServer = withForkedServer $ Server.serve (setPort port defaultConfig) 
 ~~~
 
 This will do an HTTP POST to your web service using the path `/echo`, 
@@ -194,6 +200,9 @@ This test module uses the utilities defined in HttpTester:
 - `withForkedServer` is a wrapper that forks a given action in its own thread and kills the thread after the test
 - `post` creates a Test that POSTs given data to given URL and verifies the result using `Matching`, `Exactly` or `ReturnCode`
 - `get` creates a similar Test for HTTP GET
+- `postJson` posts a JSON object which is in this case defined using [Aeson-QQ](https://github.com/finnsson/aeson-qq), which allows me to embed JSON syntax into my Haskell source.
+- `Matching`, `Exactly`, `Json`, `ReturnCode` for verifying the HTTP response in different ways
+- `All` for combining different response matchers such as `ReturnCode` and `Json`.
 
 This test uses `Main.serve (setPort port defaultConfig)` as the argument for `withForkedServer` to start up the example web services in the port 8001.
 
