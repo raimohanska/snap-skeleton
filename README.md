@@ -148,6 +148,7 @@ Cabal supports testing. There are tricks to learn though. For instance,
 - It needs to have a decent set of dependencies
 - The "main file" for tests must contain a module named "Main". (can be accomplished by omitting module name completely too)
 - Before running `cabal test` you need to `cabal configure --enable-tests` and `cabal build`
+- `cabal test` does not directly support HUnit: In your main function, you must make sure to return an error code to tell Cabal that the test failed.
 
 I included automatic tests for the sample code. The `run-tests.sh` script does the required Cabal trickery for you.
 It's slow though, so if you've not changed any dependencies, you should use `cabal build;cabal test` instead.
@@ -227,8 +228,6 @@ Listening on http://0.0.0.0:8000/
 Troubleshooting
 ===============
 
-If you have trouble installing package `curl`, check that you have libcurl4 headers installed)
-
 If you have GHC 7.2.1, you will get error on cabal install (at least for
 HSpec 0.9). This is fixed in repo, but new release is not yet available.
 
@@ -252,8 +251,6 @@ Status
 
 This stuff is under progress! Here's the backlog:
 
-- s/json/aeson/g
-- s/curl/HTTP/g
 - Try out text-json-qq in tests
 - Learn from Snap tests, possibly employ Snap.Test facilities
 - Cabal repl or similar (cabal-dev ghci is close but doesn't allow reloading of srcs)

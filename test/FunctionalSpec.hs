@@ -20,6 +20,6 @@ functionalTests = wrapTest withTestServer $ TestList [
   ]
 
 port = 8001
-url= "localhost:" ++ (show port) 
+url= "http://localhost:" ++ (show port) 
 
 withTestServer = withForkedServer $ Server.serve (setPort port defaultConfig) 
