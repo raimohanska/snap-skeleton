@@ -11,11 +11,11 @@ import Data.Text
 
 functionalTests = wrapTest withTestServer $ TestList [
   post "Echo string" url "/echo" "lol" $ Matching "l.*l"
-  , post "Echo JSON" url "/jsonecho" "{\"message\":\"hola\"}" $ Json [aesonQQ| {message:"hola"} |]
+  , postJson "Echo JSON" url "/jsonecho" [aesonQQ|{message:"hola"}|] $ Json [aesonQQ| {message:"hola"} |]
   , get "Echo JSON with GET = 404" url "/jsonecho" $ ReturnCode 404
-  , post "POST restful Banana" url "/banana" "{\"color\":\"yellow\"}" $ Exactly "\"1\""
+  , postJson "POST restful Banana" url "/banana" [aesonQQ|{color:"yellow"}|] $ Exactly "\"1\""
   , post "POST rotten Banana" url "/banana" "{wtf?}" $ All $ [ReturnCode 500, Matching ".*rotten.*"]
-  , get "GET restful Banana" url "/banana/1" $ Exactly "{\"color\":\"yellow\"}" 
+  , get "GET restful Banana" url "/banana/1" $ Json [aesonQQ|{color:"yellow"}|] 
   , get "Unknown Banana not found - 404" url "/banana/2" $ ReturnCode 404
   ]
 

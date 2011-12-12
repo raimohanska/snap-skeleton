@@ -27,6 +27,9 @@ post desc root path request expected =
 get desc root path expected = 
   httpTest desc (HTTP.get (root ++ path)) expected
 
+postJson desc root path request expected =
+  post desc root path (UTF8.toString $ A.encode request) expected
+
 httpTest :: String -> IO (Int, String) -> ExpectedResult -> Test
 httpTest desc request expected = TestLabel desc $ TestCase $ do
     (code, body) <- request
