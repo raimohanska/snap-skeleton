@@ -1,13 +1,17 @@
+{-# LANGUAGE QuasiQuotes #-}
 module FunctionalSpec where
 
 import Snap.Http.Server.Config
 import Test.HUnit
 import Server
 import Util.HttpTester
+import Data.Aeson.QQ
+import Data.Aeson.Types
+import Data.Text
 
 functionalTests = wrapTest withTestServer $ TestList [
   post "Echo string" url "/echo" "lol" $ Matching "l.*l"
-  , post "Echo JSON" url "/jsonecho" "{\"message\":\"hola\"}" $ Exactly "{\"message\":\"hola\"}"
+  , post "Echo JSON" url "/jsonecho" "{\"message\":\"hola\"}" $ Json [aesonQQ| {message:"hola"} |]
   , get "Echo JSON with GET = 404" url "/jsonecho" $ ReturnCode 404
   , post "POST restful Banana" url "/banana" "{\"color\":\"yellow\"}" $ Exactly "\"1\""
   , post "POST rotten Banana" url "/banana" "{wtf?}" $ All $ [ReturnCode 500, Matching ".*rotten.*"]
